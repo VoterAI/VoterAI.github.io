@@ -195,7 +195,7 @@
     </div>
 </div>
 <script>
-    // ⚠️ ضع رابط الـ ngrok الخاص بك هنا بدلاً من الرابط التجريبي بالأسفل
+    // ⚠️ تأكد من أن الرابط هو رابط الـ ngrok الحالي الخاص بك من الكولاب
     const SERVER_URL = "https://unvizored-clementina-reformedly.ngrok-free.dev"; 
 
     const generateBtn = document.querySelector('.generate-btn');
@@ -223,8 +223,7 @@
 
             const data = await response.json();
 
-           if (data.status === "success") {
-                // 🎉 نجاح! لا داعي للتنبيه، سنعرض الفيديو فوراً
+            if (data.status === "success") {
                 console.log("السيناريو المولد:", data.ai_script);
 
                 // 1. نظهر صندوق الفيديو المخفي
@@ -234,31 +233,29 @@
 
                 videoContainer.style.display = 'block';
                 
-                // 2. نحدث رابط الفيديو (نستخدم رابط السيرفر الكامل)
+                // 2. نحدث رابط الفيديو ونعرضه
                 videoPlayer.querySelector('source').src = `${SERVER_URL}${data.video_url}`;
-                videoPlayer.load(); // تحميل ملف الفيديو الجديد
+                videoPlayer.load(); // إعادة تحميل المشغل
                 
                 // 3. نضع السيناريو الذي ألفه Gemini
                 scriptPre.textContent = data.ai_script;
 
-                // 4. ننزل لأسفل الصفحة ليرى المستخدم الفيديو
+                // 4. النزول تلقائياً للفيديو
                 videoContainer.scrollIntoView({ behavior: 'smooth' });
 
             } else {
-                console.log("السيناريو المولد:", data.ai_script);
-                // هنا يمكننا مستقبلاً عرض الفيديو مباشرة في الموقع!
-            } else {
+                // في حال فشل السيرفر الداخلي
                 alert("❌ حدث خطأ أثناء التوليد: " + data.message);
             }
+
         } catch (error) {
             alert("❌ فشل الاتصال بالسيرفر! تأكد أن الكولاب يعمل والرابط صحيح.");
             console.error(error);
         } finally {
+            // إعادة الزر لوضعه الطبيعي بعد الانتهاء
             generateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> توليد الفيلم السينمائي الكامل';
             generateBtn.disabled = false;
         }
     });
 </script>
-    
-</body>
 </html>
