@@ -182,6 +182,51 @@
         مدعوم بواسطة مفتاح Gemini API | تم التطوير بواسطة Tayap
     </div>
 </div>
+<script>
+    // ⚠️ ضع رابط الـ ngrok الخاص بك هنا بدلاً من الرابط التجريبي بالأسفل
+    const SERVER_URL = "https://unvizored-clementina-reformedly.ngrok-free.dev"; 
 
+    const generateBtn = document.querySelector('.generate-btn');
+    const textarea = document.querySelector('textarea');
+    
+    generateBtn.addEventListener('click', async () => {
+        const scriptText = textarea.value;
+        
+        if (!scriptText) {
+            alert("⚠️ يرجى كتابة السيناريو أولاً قبل التوليد!");
+            return;
+        }
+
+        generateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التوليد والتحليل السينمائي...';
+        generateBtn.disabled = true;
+
+        const formData = new FormData();
+        formData.append("script", scriptText);
+
+        try {
+            const response = await fetch(`${SERVER_URL}/generate-movie/`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                alert("🎉 نجاح! تم توليد الفيديو والقصة بنجاح!");
+                console.log("السيناريو المولد:", data.ai_script);
+                // هنا يمكننا مستقبلاً عرض الفيديو مباشرة في الموقع!
+            } else {
+                alert("❌ حدث خطأ أثناء التوليد: " + data.message);
+            }
+        } catch (error) {
+            alert("❌ فشل الاتصال بالسيرفر! تأكد أن الكولاب يعمل والرابط صحيح.");
+            console.error(error);
+        } finally {
+            generateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> توليد الفيلم السينمائي الكامل';
+            generateBtn.disabled = false;
+        }
+    });
+</script>
+    
 </body>
 </html>
