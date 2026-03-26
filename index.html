@@ -177,6 +177,18 @@
         <i class="fa-solid fa-wand-magic-sparkles"></i>
         توليد الفيلم السينمائي الكامل
     </button>
+    <div id="video-result-container" style="display: none; margin-top: 25px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 25px var(--primary); border: 2px solid var(--primary);">
+        <video id="final-video-player" controls style="width: 100%; border-radius: 10px;">
+            <source src="" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+        <div style="background: rgba(0,0,0,0.8); padding: 15px; color: #fff;">
+            <h4 style="margin-top: 0; color: var(--secondary);">📝 السيناريو السينمائي الكامل (الـ 40 دقيقة):</h4>
+            <pre id="ai-generated-script" style="white-space: pre-wrap; font-size: 0.9rem; max-height: 200px; overflow-y: auto; color: #ddd;">
+                سيتم تحميل السيناريو هنا...
+            </pre>
+        </div>
+    </div>
 
     <div class="footer">
         مدعوم بواسطة مفتاح Gemini API | تم التطوير بواسطة Tayap
@@ -211,8 +223,28 @@
 
             const data = await response.json();
 
-            if (data.status === "success") {
-                alert("🎉 نجاح! تم توليد الفيديو والقصة بنجاح!");
+           if (data.status === "success") {
+                // 🎉 نجاح! لا داعي للتنبيه، سنعرض الفيديو فوراً
+                console.log("السيناريو المولد:", data.ai_script);
+
+                // 1. نظهر صندوق الفيديو المخفي
+                const videoContainer = document.getElementById('video-result-container');
+                const videoPlayer = document.getElementById('final-video-player');
+                const scriptPre = document.getElementById('ai-generated-script');
+
+                videoContainer.style.display = 'block';
+                
+                // 2. نحدث رابط الفيديو (نستخدم رابط السيرفر الكامل)
+                videoPlayer.querySelector('source').src = `${SERVER_URL}${data.video_url}`;
+                videoPlayer.load(); // تحميل ملف الفيديو الجديد
+                
+                // 3. نضع السيناريو الذي ألفه Gemini
+                scriptPre.textContent = data.ai_script;
+
+                // 4. ننزل لأسفل الصفحة ليرى المستخدم الفيديو
+                videoContainer.scrollIntoView({ behavior: 'smooth' });
+
+            } else {
                 console.log("السيناريو المولد:", data.ai_script);
                 // هنا يمكننا مستقبلاً عرض الفيديو مباشرة في الموقع!
             } else {
